@@ -10,6 +10,9 @@
 
 module.exports = function(grunt) {
 
+  var path = require('path');
+  var fs = require('fs');
+
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
@@ -38,13 +41,30 @@ module.exports = function(grunt) {
 
       // Handle options.
       src += options.punctuation;
+      
+      var xml = getHeader();
+      xml += "stuff in between";
+      xml += getFooter();
 
       // Write the destination file.
-      grunt.file.write(f.dest, src);
+      grunt.file.write(f.dest, xml);
 
       // Print a success message.
       grunt.log.writeln('File "' + f.dest + '" created.');
     });
   });
+  
+  var getTimestamp = function (src) {
+    var stat = fs.lstatSync(src);
+    return stat.mtime;
+  };
+  
+  var getHeader = function() {
+    return '<?xml version="1.0" encoding="UTF-8"?>' + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+  };
+   
+  var getFooter = function() {
+    return '</sitemapindex>';
+  };
 
 };

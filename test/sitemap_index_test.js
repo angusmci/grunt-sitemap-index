@@ -1,6 +1,9 @@
 'use strict';
 
 var grunt = require('grunt');
+var fs = require('fs');
+var smi = require('../tasks/sitemap_index.js');
+
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -45,4 +48,18 @@ exports.sitemap_index = {
 
     test.done();
   },
+  
+  getTimestamp: function(test) {
+	test.expect(1);
+	
+	var stat = fs.lstatSync('README.md');
+    var mtime1 = stat.mtime;
+    console.log(mtime1);
+    // var mtime2 = smi.getTimestamp('README.md');
+    // console.log(mtime2);
+
+    test.equal(mtime1,mtime1);
+  
+    test.done();
+  }
 };
