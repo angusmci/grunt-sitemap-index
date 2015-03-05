@@ -20,8 +20,11 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       punctuation: '.',
-      separator: ', '
+      separator: '',
+      baseurl: 'http://example.com/'
     });
+
+	var xml = getHeader();
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
@@ -36,14 +39,10 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+        return makeEntry(filepath,options);
+      }).join('');
 
-      // Handle options.
-      src += options.punctuation;
-      
-      var xml = getHeader();
-      xml += "stuff in between";
+      xml += src;
       xml += getFooter();
 
       // Write the destination file.
@@ -54,17 +53,20 @@ module.exports = function(grunt) {
     });
   });
   
-  var getTimestamp = function (src) {
-    var stat = fs.lstatSync(src);
-    return stat.mtime;
-  };
-  
   var getHeader = function() {
-    return '<?xml version="1.0" encoding="UTF-8"?>' + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    return '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
   };
    
   var getFooter = function() {
     return '</sitemapindex>';
+  };
+  
+  var makeEntry = function(filepath,options) {
+    var stat = fs.lstatSync(filepath);
+    var timestamp = stat.mtime;
+    var url = options.baseurl + filepath;
+    return '<sitemap><loc>' + url + '</loc><lastmod>' + timestamp.toISOString() + '</lastmod></sitemap>';
+
   };
 
 };
