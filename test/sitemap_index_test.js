@@ -32,22 +32,10 @@ exports.sitemap_index = {
   },
   default_options: function(test) {
     test.expect(1);
-    test.ok(true,"ok");
 
-    console.log("Inspecting directory");
-    var files = fs.readdirSync('tmp/');
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      console.log("File: " + file);
-    }
-    console.log("Done inspecting directory");
-//    test.doesNotThrow(function() { fs.lstatSync('tmp/default_options.xml.gz'); },
-//                      Error,
-//                      "file 'tmp/default_options.xml.gz' was not found");
-
-    // var actual = grunt.file.read('tmp/default_options');
-    // var expected = grunt.file.read('test/expected/default_options');
-    // test.equal(actual, expected, 'should describe what the default behavior is.');
+    test.doesNotThrow(function() { fs.lstatSync('tmp/default_options.xml.gz'); },
+                      Error,
+                      "file 'tmp/default_options.xml.gz' was not found");
 
     test.done();
   },
