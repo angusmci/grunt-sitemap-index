@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 
   var path = require('path');
   var fs = require('fs');
+  var zlib = require('zlib');
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
@@ -19,9 +20,8 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('sitemap_index', 'Grunt plugin to generate XML sitemap index files', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: '',
-      baseurl: 'http://example.com/'
+      baseurl: 'http://example.com/',
+      compress: true
     });
 
 	var xml = getHeader();
@@ -45,11 +45,21 @@ module.exports = function(grunt) {
       xml += src;
       xml += getFooter();
 
-      // Write the destination file.
-      grunt.file.write(f.dest, xml);
+      // Compress if required
+      
+      if (options.compress) {
+        zlib.gzip(xml, function(err, buffer) {
+          if (!err) {
+            grunt.file.write(f.dest + ".gz",buffer);
+            grunt.log.writeln('Compressed file "' + f.dest + '.gz" created.');
+          }
+        });
+      }
+      else {
+        grunt.file.write(f.dest, xml);
+        grunt.log.writeln('File "' + f.dest + '" created.');
+      }
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
     });
   });
   
