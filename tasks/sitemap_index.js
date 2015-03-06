@@ -48,10 +48,14 @@ module.exports = function(grunt) {
       // Compress if required
       
       if (options.compress) {
+        grunt.log.writeln("Handling compressed options");
         zlib.gzip(xml, function(err, buffer) {
           if (!err) {
             grunt.file.write(f.dest + ".gz",buffer);
             grunt.log.writeln('Compressed file "' + f.dest + '.gz" created.');
+          }
+          else {
+            grunt.log.writeln("Error " + err + " occurred");
           }
         });
       }
