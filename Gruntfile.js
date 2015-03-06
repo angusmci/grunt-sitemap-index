@@ -39,7 +39,7 @@ module.exports = function(grunt) {
       },
       custom_options: {
         options: {
-          baseurl: 'http://myawesomedomain.com/',
+          baseurl: 'http://mydomain.com/',
           compress: false
         },
         files: {
