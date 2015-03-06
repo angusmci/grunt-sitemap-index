@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       custom_options: {
         options: {
           baseurl: 'http://myawesomedomain.com/',
-          compress: true
+          compress: false
         },
         files: {
           'tmp/custom_options.xml': ['test/fixtures/*.gz']
