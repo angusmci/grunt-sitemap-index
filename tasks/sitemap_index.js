@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
-      var src = f.src.filter(function(filepath) {
+      var entry = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(path.join(cwd_dir,filepath))) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
         return makeEntry(filepath,cwd_dir,options);
       }).join('');
 
-      xml += src;
+      xml += entry;
       xml += getFooter();
 
       // Compress if required
