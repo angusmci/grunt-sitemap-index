@@ -26,12 +26,21 @@ module.exports = function(grunt) {
 
 	var xml = getHeader();
 
+	// We need to take into account the 'cwd' attribute of the files object,
+	// as users will typically want to change the working directory when
+	// using this task.
+	
+	var cwd_dir = this.files[0].cwd;
+	if (cwd_dir === undefined) {
+		cwd_dir = "";
+	}
+
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
       var src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
+        if (!grunt.file.exists(path.join(cwd_dir,filepath))) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
         } else {
@@ -39,7 +48,7 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         // Read file source.
-        return makeEntry(filepath,options);
+        return makeEntry(filepath,cwd_dir,options);
       }).join('');
 
       xml += src;
@@ -71,12 +80,11 @@ module.exports = function(grunt) {
     return '</sitemapindex>';
   };
   
-  var makeEntry = function(filepath,options) {
-    var stat = fs.lstatSync(filepath);
+  var makeEntry = function(filepath,cwd_dir,options) {
+    var absfilepath = path.join(cwd_dir,filepath);
+    var stat = fs.lstatSync(absfilepath);
     var timestamp = stat.mtime;
     var url = options.baseurl + filepath;
     return '<sitemap><loc>' + url + '</loc><lastmod>' + timestamp.toISOString() + '</lastmod></sitemap>';
-
   };
-
 };
