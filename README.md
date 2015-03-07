@@ -3,7 +3,7 @@
 > Grunt plugin to generate XML sitemap index files
 
 ## Getting Started
-This plugin requires Grunt `~0.4.5`
+This plugin requires Grunt `~0.4.5` and Node `~>0.12.0`.
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
@@ -37,47 +37,73 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.baseurl
 Type: `String`
-Default value: `',  '`
+Default value: `http://example.com/`
 
-A string value that is used to do something with whatever.
+URL used as a prefix for all URLs included in the sitemap.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.compress
+Type: `Boolean`
+Default value: `true`
 
-A string value that is used to do something else with whatever else.
+Determines whether the sitemap index file should be compressed using `gzip` or not.
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+
+This example shows the default usage, without any options.
+
+Note that you should always specify the `baseurl` option, as otherwise your sitemap will contain incorrect URLs.
 
 ```js
 grunt.initConfig({
   sitemap_index: {
     options: {},
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'dest/sitemap-index.xml': ['src/sitemap-1.xml.gz', 'src/sitemap-2.xml.gz' ],
     },
   },
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
 
+This example shows how to generate a sitemap index file for the domain 'mydomain.com'. The index file will not be compressed.
+ 
 ```js
 grunt.initConfig({
   sitemap_index: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      baseurl: 'http://mydomain.com/',
+      compress: false,
     },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'dest/sitemap-index.xml': ['src/sitemap-1.xml.gz', 'src/sitemap-2.xml.gz' ],
     },
+  },
+});
+```
+#### Changing working directory
+
+Generally, in order to get the correct paths to the sitemaps, you will want to use a file specification that includes the `cwd` element. For example, if your build directory for production is `build/production`, and your sitemaps live in the root of your document tree, you'd want to set `cwd` to `build/production` so that you generate URLs of the form `http://yourdomain.com/your-sitemap.xml.gz`. If you don't use `cwd`, you're likely to end up with a URL like `http://yourdomain.com/build/production/your-sitemap.xml.gz`, which is probably not what you want.  
+ 
+```js
+grunt.initConfig({
+  sitemap_index: {
+    production: {
+        options: {
+          compress: true,
+          baseurl: 'http://mydomain.com/',
+        },
+        files: [{
+          expand: false,
+          cwd: 'build/production',
+          src: ['map-static.xml.gz','map-dynamic.xml.gz','map-images.xml.gz'],
+          dest: 'build/production/map-index.xml'
+        }]
+      }
   },
 });
 ```
