@@ -20,6 +20,9 @@ grunt.loadNpmTasks('grunt-sitemap-index');
 ## The "sitemap_index" task
 
 ### Overview
+
+The `sitemap_index` task generates a sitemap index file, as described at [sitemaps.org](http://www.sitemaps.org/protocol.html#index). 
+
 In your project's Gruntfile, add a section named `sitemap_index` to the data object passed into `grunt.initConfig()`.
 
 ```js
@@ -41,7 +44,7 @@ grunt.initConfig({
 Type: `String`
 Default value: `http://example.com/`
 
-URL used as a prefix for all URLs included in the sitemap.
+URL used as a prefix for all URLs included in the sitemap. This is a required option.
 
 #### options.compress
 Type: `Boolean`
@@ -112,4 +115,6 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+
+ * 2015-03-07   v0.1.0   Initial release
+
