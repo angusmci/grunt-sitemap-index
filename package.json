@@ -1,7 +1,7 @@
 {
   "name": "grunt-sitemap-index",
   "description": "Grunt plugin to generate XML sitemap index files",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/angusmci/grunt-sitemap-index",
   "author": {
     "name": "Angus McIntyre",
